@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "AI Finance Controller"
+description = "A finance operations control center that reconciles a 60-record synthetic batch, reports measured match quality, surfaces unresolved exceptions, and shows the resulting cash position."
+version = "1.0.0"
+id = "artifacts/finance-controller"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21947
+
+[services.development]
+run = "pnpm --filter @workspace/finance-controller run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/finance-controller", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/finance-controller/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21947"
+BASE_PATH = "/"
